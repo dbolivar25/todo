@@ -1,0 +1,11 @@
+[package]
+name = "todo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.39"
+clap = { version = "4.5.16", features = ["derive"] }
+dirs = "5.0.1"
+rusqlite = { version = "0.32.1", features = ["bundled"] }
+thiserror = "2.0.9"
