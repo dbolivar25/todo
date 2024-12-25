@@ -16,12 +16,30 @@ fn execute_command(repo: &mut Repo, command: Command) -> Result<()> {
             days_to_start,
             days_to_complete,
         } => {
-            repo.add(name, description, weight, days_to_start, days_to_complete)?;
-            println!("Todo item added successfully!");
+            repo.add(
+                name.clone(),
+                description.clone(),
+                weight,
+                days_to_start,
+                days_to_complete,
+            )?;
+            println!("✓ Added new task: {}", name);
+            if let Some(desc) = description {
+                println!("  Description: {}", desc);
+            }
+            if let Some(w) = weight {
+                println!("  Weight: {}", w);
+            }
+            if let Some(start) = days_to_start {
+                println!("  Start in: {} days", start);
+            }
+            if let Some(complete) = days_to_complete {
+                println!("  Complete in: {} days", complete);
+            }
         }
         Command::Remove { name } => {
             repo.remove(&name)?;
-            println!("Todo item removed successfully!");
+            println!("✓ Removed task: {}", name);
         }
         Command::Edit {
             name,
@@ -32,18 +50,33 @@ fn execute_command(repo: &mut Repo, command: Command) -> Result<()> {
             days_to_complete,
         } => {
             repo.edit(
-                name,
-                new_name,
-                description,
+                name.clone(),
+                new_name.clone(),
+                description.clone(),
                 weight,
                 days_to_start,
                 days_to_complete,
             )?;
-            println!("Todo item updated successfully!");
+            println!("✓ Updated task: {}", name);
+            if let Some(new) = new_name {
+                println!("  New name: {}", new);
+            }
+            if let Some(desc) = description {
+                println!("  New description: {}", desc);
+            }
+            if let Some(w) = weight {
+                println!("  New weight: {}", w);
+            }
+            if let Some(start) = days_to_start {
+                println!("  New start in: {} days", start);
+            }
+            if let Some(complete) = days_to_complete {
+                println!("  New complete in: {} days", complete);
+            }
         }
         Command::Complete { name } => {
             repo.complete(&name)?;
-            println!("Todo item marked as complete!");
+            println!("✓ Marked as complete: {}", name);
         }
         Command::List {
             weight,
@@ -52,16 +85,42 @@ fn execute_command(repo: &mut Repo, command: Command) -> Result<()> {
             sort_by_weight,
         } => {
             let items = repo.list(weight, completed, sort_by_deadline, sort_by_weight)?;
-
             if items.is_empty() {
-                println!("No todo items found.");
+                println!("No tasks");
+                if let Some(w) = weight {
+                    println!("  (filtered by weight: {})", w);
+                }
+                if completed {
+                    println!(
+                        "  (showing {} tasks)",
+                        if completed { "completed" } else { "pending" }
+                    );
+                }
                 return Ok(());
             }
 
-            println!("\nTodo Items:");
+            // Print list header with filter information
+            println!("Tasks");
+            if let Some(w) = weight {
+                println!("  Weight filter: {}", w);
+            }
+            if completed {
+                println!(
+                    "  Showing: {} tasks",
+                    if completed { "completed" } else { "pending" }
+                );
+            }
+            if sort_by_deadline {
+                println!("  Sorted by: deadline");
+            } else if sort_by_weight {
+                println!("  Sorted by: weight");
+            }
+            println!();
+
+            // Print tasks
             for item in items {
                 println!("{}", item);
-                println!("----------------------------------------");
+                println!("{}", str::repeat("─", 40));
             }
         }
     }

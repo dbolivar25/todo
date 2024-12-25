@@ -2,17 +2,17 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum Error {
-    #[error("Database error: {0}")]
+    #[error("database error: {0}")]
     Database(#[from] rusqlite::Error),
-    #[error("Todo item not found: {0}")]
+    #[error("todo item not found: {0}")]
     ItemNotFound(String),
-    #[error("Invalid date format: {0}")]
+    #[error("invalid date format: {0}")]
     DateParse(#[from] chrono::ParseError),
-    #[error("Invalid weight format: {0}")]
+    #[error("invalid weight format: {0}")]
     WeightParse(String),
-    #[error("Home directory not found")]
+    #[error("home directory not found")]
     HomeDirNotFound,
-    #[error("IO error: {0}")]
+    #[error("io error: {0}")]
     IO(#[from] std::io::Error),
 }
 

@@ -78,7 +78,7 @@ pub enum Command {
     },
 }
 
-#[derive(ValueEnum, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(ValueEnum, Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Weight {
     Low,
     Medium,
