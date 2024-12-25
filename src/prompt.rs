@@ -6,7 +6,7 @@ pub struct TodoPrompt;
 
 impl Prompt for TodoPrompt {
     fn render_prompt_left(&self) -> Cow<str> {
-        Cow::Borrowed("todo> ")
+        Cow::Borrowed("todo")
     }
 
     fn render_prompt_right(&self) -> Cow<str> {
@@ -14,11 +14,11 @@ impl Prompt for TodoPrompt {
     }
 
     fn render_prompt_indicator(&self, _edit_mode: PromptEditMode) -> Cow<str> {
-        Cow::Borrowed("") // No indicator needed since it's part of left prompt
+        Cow::Borrowed("> ") // No indicator needed since it's part of left prompt
     }
 
     fn render_prompt_multiline_indicator(&self) -> Cow<str> {
-        Cow::Borrowed("") // For multiline input
+        Cow::Borrowed(">> ") // For multiline input
     }
 
     fn render_prompt_history_search_indicator(

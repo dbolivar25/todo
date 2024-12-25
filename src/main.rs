@@ -85,7 +85,7 @@ fn run_repl(repo: &mut Repo) -> Result<()> {
                                 command: Some(command),
                             }) => {
                                 if let Err(e) = execute_command(repo, command) {
-                                    eprintln!("Error: {}", e);
+                                    eprintln!("error: {}", e);
                                 }
                             }
                             Ok(Args { command: None }) => {}
@@ -95,7 +95,7 @@ fn run_repl(repo: &mut Repo) -> Result<()> {
                         }
                     }
                     None => {
-                        eprintln!("Error: Invalid command syntax");
+                        eprintln!("error: invalid command syntax");
                     }
                 }
             }
