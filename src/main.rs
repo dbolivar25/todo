@@ -3,7 +3,7 @@ use reedline::{Reedline, Signal};
 use todo::{
     cli::{Args, Command},
     error::Result,
-    prompt::CustomPrompt,
+    prompt::TodoPrompt,
     repo::Repo,
 };
 
@@ -70,7 +70,7 @@ fn execute_command(repo: &mut Repo, command: Command) -> Result<()> {
 
 fn run_repl(repo: &mut Repo) -> Result<()> {
     let mut line_editor = Reedline::create();
-    let prompt = CustomPrompt;
+    let prompt = TodoPrompt;
 
     loop {
         match line_editor.read_line(&prompt) {

@@ -2,9 +2,9 @@ use reedline::{Prompt, PromptEditMode, PromptHistorySearch, PromptHistorySearchS
 use std::borrow::Cow;
 
 #[derive(Clone)]
-pub struct CustomPrompt;
+pub struct TodoPrompt;
 
-impl Prompt for CustomPrompt {
+impl Prompt for TodoPrompt {
     fn render_prompt_left(&self) -> Cow<str> {
         Cow::Borrowed("todo> ")
     }
