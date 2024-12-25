@@ -1,15 +1,14 @@
 use clap::Parser;
+use reedline::{Reedline, Signal};
 use todo::{
     cli::{Args, Command},
     error::Result,
+    prompt::CustomPrompt,
     repo::Repo,
 };
 
-fn main() -> Result<()> {
-    let args = Args::parse();
-    let mut repo = Repo::new()?;
-
-    match args.command {
+fn execute_command(repo: &mut Repo, command: Command) -> Result<()> {
+    match command {
         Command::Add {
             name,
             description,
@@ -66,6 +65,60 @@ fn main() -> Result<()> {
             }
         }
     }
-
     Ok(())
+}
+
+fn run_repl(repo: &mut Repo) -> Result<()> {
+    let mut line_editor = Reedline::create();
+    let prompt = CustomPrompt;
+
+    loop {
+        match line_editor.read_line(&prompt) {
+            Ok(Signal::Success(buffer)) => {
+                // Parse the input line as if it were command line arguments
+                match shlex::split(&buffer) {
+                    Some(arg_strings) => match Args::try_parse_from(arg_strings) {
+                        Ok(Args {
+                            command: Some(command),
+                        }) => {
+                            if let Err(e) = execute_command(repo, command) {
+                                eprintln!("Error: {}", e);
+                            }
+                        }
+                        Ok(Args { command: None }) => {}
+                        Err(e) => {
+                            eprintln!("{}", e);
+                        }
+                    },
+                    None => {
+                        eprintln!("Error: Invalid command syntax");
+                    }
+                }
+            }
+            Ok(Signal::CtrlD | Signal::CtrlC) => {
+                break Ok(());
+            }
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                break Ok(());
+            }
+        }
+    }
+}
+
+fn main() -> Result<()> {
+    if let Args {
+        command: Some(command),
+    } = Args::parse()
+    {
+        let mut repo = Repo::new()?;
+        execute_command(&mut repo, command)?;
+
+        Ok(())
+    } else {
+        let mut repo = Repo::new()?;
+        run_repl(&mut repo)?;
+
+        Ok(())
+    }
 }

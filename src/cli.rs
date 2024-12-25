@@ -9,7 +9,7 @@ use crate::error::{Error, Result};
 pub struct Args {
     /// The todo app commands
     #[clap(subcommand)]
-    pub command: Command,
+    pub command: Option<Command>,
 }
 
 #[derive(Subcommand, Debug)]
