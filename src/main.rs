@@ -77,19 +77,23 @@ fn run_repl(repo: &mut Repo) -> Result<()> {
             Ok(Signal::Success(buffer)) => {
                 // Parse the input line as if it were command line arguments
                 match shlex::split(&buffer) {
-                    Some(arg_strings) => match Args::try_parse_from(arg_strings) {
-                        Ok(Args {
-                            command: Some(command),
-                        }) => {
-                            if let Err(e) = execute_command(repo, command) {
-                                eprintln!("Error: {}", e);
+                    Some(mut arg_strings) => {
+                        arg_strings.insert(0, "todo".to_string());
+
+                        match Args::try_parse_from(arg_strings) {
+                            Ok(Args {
+                                command: Some(command),
+                            }) => {
+                                if let Err(e) = execute_command(repo, command) {
+                                    eprintln!("Error: {}", e);
+                                }
+                            }
+                            Ok(Args { command: None }) => {}
+                            Err(e) => {
+                                eprintln!("{}", e);
                             }
                         }
-                        Ok(Args { command: None }) => {}
-                        Err(e) => {
-                            eprintln!("{}", e);
-                        }
-                    },
+                    }
                     None => {
                         eprintln!("Error: Invalid command syntax");
                     }
