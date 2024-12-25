@@ -721,6 +721,7 @@ dependencies = [
  "chrono",
  "clap",
  "dirs",
+ "nu-ansi-term",
  "reedline",
  "rusqlite",
  "shlex",

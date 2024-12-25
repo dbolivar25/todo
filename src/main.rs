@@ -1,5 +1,6 @@
 use clap::Parser;
-use reedline::{Reedline, Signal};
+use nu_ansi_term::{Color, Style};
+use reedline::{DefaultHinter, Reedline, Signal};
 use todo::{
     cli::{Args, Command},
     error::Result,
@@ -128,7 +129,9 @@ fn execute_command(repo: &mut Repo, command: Command) -> Result<()> {
 }
 
 fn run_repl(repo: &mut Repo) -> Result<()> {
-    let mut line_editor = Reedline::create();
+    let mut line_editor = Reedline::create().with_hinter(Box::new(
+        DefaultHinter::default().with_style(Style::new().italic().fg(Color::LightGray)),
+    ));
     let prompt = TodoPrompt;
 
     loop {
